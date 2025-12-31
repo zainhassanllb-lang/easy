@@ -63,8 +63,8 @@ export function PaymentVerificationList({ workers }: PaymentVerificationListProp
                         ? (worker.profileImage.startsWith('http')
                           ? worker.profileImage
                           : worker.profileImage.startsWith('/')
-                            ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}${worker.profileImage}`
-                            : `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}/uploads/workers/${worker.profileImage}`)
+                            ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}${worker.profileImage}`
+                            : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}/uploads/workers/${worker.profileImage}`)
                         : "/placeholder.svg?height=120&width=120"
                     }
                     alt={worker.name}
@@ -148,8 +148,8 @@ export function PaymentVerificationList({ workers }: PaymentVerificationListProp
                     selectedWorker.paymentProof.startsWith('http')
                       ? selectedWorker.paymentProof
                       : selectedWorker.paymentProof.startsWith('/')
-                        ? `http://localhost:5000${selectedWorker.paymentProof}`
-                        : `http://localhost:5000/uploads/payments/${selectedWorker.paymentProof}`
+                        ? `https://easy-e6lz.onrender.com${selectedWorker.paymentProof}`
+                        : `https://easy-e6lz.onrender.com/uploads/payments/${selectedWorker.paymentProof}`
                   }
                   alt="Payment Proof"
                   fill

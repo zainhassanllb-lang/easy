@@ -8,7 +8,7 @@ function cookieHeader(cookieStore: Awaited<ReturnType<typeof cookies>>) {
 }
 
 export async function GET(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
   const url = new URL(request.url)
 
   const workerId = url.searchParams.get("workerId") || ""
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
   const body = await request.json().catch(() => ({}))
   const workerId = String(body.workerId || "")
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
   const url = new URL(request.url)
   const workerId = url.searchParams.get("workerId") || ""
 

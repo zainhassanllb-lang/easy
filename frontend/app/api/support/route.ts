@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
     try {
-        const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+        const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
         const body = await request.json()
 
         const res = await fetch(`${backendUrl}/api/support`, {

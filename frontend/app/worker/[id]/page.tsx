@@ -21,7 +21,7 @@ interface PageProps {
 
 async function getWorkerById(id: string) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
 
     const res = await fetch(`${backendUrl}/api/workers/${id}`, {
       method: "GET",

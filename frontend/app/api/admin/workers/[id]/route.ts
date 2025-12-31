@@ -9,7 +9,7 @@ export async function DELETE(
 ) {
     try {
         const { id } = await params
-        const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+        const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
 
         const cookieStore = await cookies()
         const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ")

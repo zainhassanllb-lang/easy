@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
     const body = await request.text()
     
     // Forward cookies from the request

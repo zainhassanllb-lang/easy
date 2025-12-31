@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
 
     // Check if it's FormData or JSON
     const contentType = request.headers.get("content-type") || ""

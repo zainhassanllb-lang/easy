@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 
 export async function GET() {
     try {
-        const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+        const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
 
         // Forward cookies for authentication
         const cookieStore = await cookies()

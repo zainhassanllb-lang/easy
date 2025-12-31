@@ -15,7 +15,7 @@ interface SearchParams {
 
 async function fetchWorkersByLocation(city?: string, locality?: string) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
     const params = new URLSearchParams()
     if (city) params.append("city", city)
     if (locality) params.append("locality", locality)

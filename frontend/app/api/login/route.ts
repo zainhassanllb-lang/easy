@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 export async function POST(req: Request) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
     const body = await req.text()
 
     const res = await fetch(`${backendUrl}/api/login`, {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       console.error("Failed to parse login response:", text)
       return NextResponse.json({ success: false, error: "Invalid response from server" }, { status: 500 })
     }
-    
+
     // If login successful, extract token from backend cookie and set it in Next.js
     if (res.ok && data.success) {
       const setCookieHeader = res.headers.get("set-cookie")
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         if (cookieMatch) {
           const token = decodeURIComponent(cookieMatch[1])
           const cookieStore = await cookies()
-          
+
           // Set cookie for frontend domain
           cookieStore.set(cookieName, token, {
             httpOnly: true,
