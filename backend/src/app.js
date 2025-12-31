@@ -7,6 +7,10 @@ const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const passport = require('./config/passport-config');
 
+const { connectDB } = require('./config/db');
+const User = require('./models/User');
+const Package = require('./models/Package');
+
 const errorHandler = require('./middleware/error');
 
 const authRoutes = require('./routes/auth');
@@ -17,6 +21,58 @@ const statsRoutes = require('./routes/stats');
 const paymentRoutes = require('./routes/payments');
 const sessionRoutes = require('./routes/session');
 const reviewRoutes = require('./routes/reviews');
+
+async function seedPackages() {
+  const defaults = [
+    {
+      name: 'basic',
+      price: 2000,
+      duration: 30,
+      rank: 1,
+      features: [
+        'Profile listing in your category',
+        'Limited visibility',
+        'Basic analytics'
+      ]
+    },
+    {
+      name: 'standard',
+      price: 5000,
+      duration: 30,
+      rank: 2,
+      features: [
+        'Higher ranking in listings',
+        'More profile exposure',
+        'Call/WhatsApp click tracking'
+      ]
+    },
+    {
+      name: 'premium',
+      price: 10000,
+      duration: 30,
+      rank: 3,
+      features: [
+        'Top rank in listings',
+        'Featured placement',
+        'Full analytics'
+      ]
+    }
+  ];
+
+  for (const p of defaults) {
+    await Package.updateOne({ name: p.name }, { $set: p }, { upsert: true });
+  }
+}
+
+async function seedAdmin() {
+  const email = (process.env.ADMIN_EMAIL || 'admin@easy.com').toLowerCase();
+  const password = process.env.ADMIN_PASSWORD || 'admin123';
+  const existing = await User.findOne({ email });
+  if (existing) return;
+  const passwordHash = await User.hashPassword(password);
+  await User.create({ email, passwordHash, role: 'admin' });
+  console.log(`Seeded admin user: ${email} / ${password}`);
+}
 
 function createApp() {
   const app = express();
@@ -80,7 +136,19 @@ function createApp() {
 
   app.use(errorHandler);
 
+  // Connect to DB immediately
+  const mongo = process.env.MONGODB_URI;
+  if (mongo) {
+    connectDB(mongo)
+      .then(async () => {
+        await seedPackages();
+        await seedAdmin();
+      })
+      .catch(err => console.error('DB Connection Error:', err));
+  }
+
   return app;
 }
 
-module.exports = { createApp };
+const app = createApp();
+module.exports = app;
