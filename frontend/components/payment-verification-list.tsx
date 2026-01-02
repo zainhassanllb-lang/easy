@@ -5,7 +5,8 @@ import type { Worker } from "@/lib/database"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Check, X, Eye, Phone, Mail, MapPin } from "lucide-react"
+import { Check, X, Eye, Phone, Mail, MapPin, Calendar } from "lucide-react"
+import { format } from "date-fns"
 import Image from "next/image"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
@@ -81,9 +82,17 @@ export function PaymentVerificationList({ workers }: PaymentVerificationListProp
                       <h3 className="font-semibold text-lg">{worker.name}</h3>
                       <p className="text-sm text-muted-foreground capitalize">{worker.category}</p>
                     </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {worker.packageType || "No Package"}
-                    </Badge>
+                    <div className="flex flex-col items-end gap-1">
+                      <Badge variant="secondary" className="capitalize">
+                        {worker.packageType || "No Package"}
+                      </Badge>
+                      {worker.packagePurchasedAt && (
+                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground mr-1">
+                          <Calendar className="h-3 w-3" />
+                          {format(new Date(worker.packagePurchasedAt), "PPP")}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">

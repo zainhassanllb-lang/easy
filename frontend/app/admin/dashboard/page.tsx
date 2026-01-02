@@ -67,9 +67,14 @@ async function fetchPendingPaymentWorkers() {
     return (data.workers || []).map((w: any) => ({
       ...w,
       id: w._id?.toString() || w.id,
-      packageExpiry: w.packageExpiry ? (typeof w.packageExpiry === 'string' ? new Date(w.packageExpiry) : w.packageExpiry) : null,
-      verifiedAt: w.verifiedAt ? (typeof w.verifiedAt === 'string' ? new Date(w.verifiedAt) : w.verifiedAt) : null,
-      createdAt: w.createdAt ? (typeof w.createdAt === 'string' ? new Date(w.createdAt) : w.createdAt) : null,
+      packageExpiry: w.packageExpiry ? (typeof w.packageExpiry === "string" ? new Date(w.packageExpiry) : w.packageExpiry) : null,
+      packagePurchasedAt: w.packagePurchasedAt
+        ? typeof w.packagePurchasedAt === "string"
+          ? new Date(w.packagePurchasedAt)
+          : w.packagePurchasedAt
+        : null,
+      verifiedAt: w.verifiedAt ? (typeof w.verifiedAt === "string" ? new Date(w.verifiedAt) : w.verifiedAt) : null,
+      createdAt: w.createdAt ? (typeof w.createdAt === "string" ? new Date(w.createdAt) : w.createdAt) : null,
     }))
   } catch (error) {
     console.error("Failed to fetch pending payment workers:", error)
@@ -94,9 +99,14 @@ async function fetchAllWorkers() {
     return (data.workers || []).map((w: any) => ({
       ...w,
       id: w._id?.toString() || w.id,
-      packageExpiry: w.packageExpiry ? (typeof w.packageExpiry === 'string' ? new Date(w.packageExpiry) : w.packageExpiry) : null,
-      verifiedAt: w.verifiedAt ? (typeof w.verifiedAt === 'string' ? new Date(w.verifiedAt) : w.verifiedAt) : null,
-      createdAt: w.createdAt ? (typeof w.createdAt === 'string' ? new Date(w.createdAt) : w.createdAt) : null,
+      packageExpiry: w.packageExpiry ? (typeof w.packageExpiry === "string" ? new Date(w.packageExpiry) : w.packageExpiry) : null,
+      packagePurchasedAt: w.packagePurchasedAt
+        ? typeof w.packagePurchasedAt === "string"
+          ? new Date(w.packagePurchasedAt)
+          : w.packagePurchasedAt
+        : null,
+      verifiedAt: w.verifiedAt ? (typeof w.verifiedAt === "string" ? new Date(w.verifiedAt) : w.verifiedAt) : null,
+      createdAt: w.createdAt ? (typeof w.createdAt === "string" ? new Date(w.createdAt) : w.createdAt) : null,
     }))
   } catch (error) {
     console.error("Failed to fetch all workers:", error)

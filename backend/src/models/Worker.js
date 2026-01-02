@@ -26,6 +26,7 @@ const WorkerSchema = new mongoose.Schema(
     // Package & payment
     packageType: { type: String, enum: ['basic', 'standard', 'premium', null], default: null },
     packageExpiry: { type: Date, default: null },
+    packagePurchasedAt: { type: Date, default: null },
     hasPurchasedPackage: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     paymentProof: { type: String, default: null },

@@ -8,9 +8,12 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Check, Package, Search, Upload, CreditCard } from "lucide-react"
+import { Check, Package, Search, Upload, CreditCard, Calendar } from "lucide-react"
 import { packages } from "@/lib/database"
 import type { Worker } from "@/lib/database"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
+import { format } from "date-fns"
 
 interface PackageAssignmentProps {
   workers: Worker[]
@@ -23,6 +26,9 @@ export function PackageAssignment({ workers }: PackageAssignmentProps) {
   const [paymentProof, setPaymentProof] = useState<File | null>(null)
   const [transactionId, setTransactionId] = useState("")
   const [assignedPackages, setAssignedPackages] = useState<{ [workerId: string]: string }>({})
+
+  const { toast } = useToast()
+  const router = useRouter()
 
   const filteredWorkers = workers.filter(
     (worker) =>
@@ -58,9 +64,11 @@ export function PackageAssignment({ workers }: PackageAssignmentProps) {
   }
 
   const getPackageName = (packageId: string) => {
-    const pkg = packages.find((p) => p.id === packageId)
+    const pkg = packages.find((p) => p.id === packageId || p.name.toLowerCase() === packageId.toLowerCase())
     return pkg?.name || "Unknown"
   }
+
+
 
   return (
     <div className="space-y-6">
@@ -107,14 +115,25 @@ export function PackageAssignment({ workers }: PackageAssignmentProps) {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      {assignedPackage ? (
-                        <Badge variant="default" className="gap-1">
-                          <Check className="h-3 w-3" />
-                          {assignedPackage.name} Package
-                        </Badge>
+                    <div className="flex flex-col items-end gap-2">
+                      {worker.hasPurchasedPackage ? (
+                        <>
+                          <div className="flex flex-col items-end">
+                            <Badge variant="default" className="gap-1 mb-1">
+                              <Check className="h-3 w-3" />
+                              {worker.packageType ? worker.packageType.charAt(0).toUpperCase() + worker.packageType.slice(1) : "Standard"} Package
+                            </Badge>
+                            {worker.packagePurchasedAt && (
+                              <div className="flex items-center gap-1 text-[10px] text-muted-foreground mr-1">
+                                <Calendar className="h-3 w-3" />
+                                {format(new Date(worker.packagePurchasedAt), "PPP")}
+                              </div>
+                            )}
+                          </div>
+                          {/* Cancel button removed */}
+                        </>
                       ) : (
-                        <Badge variant="outline">No Package</Badge>
+                        <Badge variant="outline">No Active Package</Badge>
                       )}
                     </div>
                   </div>
@@ -148,9 +167,8 @@ export function PackageAssignment({ workers }: PackageAssignmentProps) {
             {packages.map((pkg) => (
               <Card
                 key={pkg.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${
-                  selectedPackage === pkg.id ? "border-primary border-2" : ""
-                }`}
+                className={`cursor-pointer transition-all hover:shadow-lg ${selectedPackage === pkg.id ? "border-primary border-2" : ""
+                  }`}
                 onClick={() => setSelectedPackage(pkg.id)}
               >
                 <CardContent className="p-6">

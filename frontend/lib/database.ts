@@ -21,6 +21,7 @@ export interface Worker {
   profileImage: string
   packageType: "basic" | "standard" | "premium" | null
   packageExpiry: Date | null
+  packagePurchasedAt: Date | null
   hasPurchasedPackage: boolean
   paymentProof: string | null
   paymentStatus: "pending" | "verified" | "rejected" | null

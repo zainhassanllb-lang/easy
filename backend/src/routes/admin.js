@@ -44,6 +44,7 @@ router.post('/admin/verify-payment', auth, requireRole('admin'), async (req, res
     if (approved) {
       update.hasPurchasedPackage = true;
       update.isActive = true;
+      update.packagePurchasedAt = new Date();
     } else {
       update.hasPurchasedPackage = false;
       update.isActive = false;
@@ -52,6 +53,27 @@ router.post('/admin/verify-payment', auth, requireRole('admin'), async (req, res
     await Worker.findByIdAndUpdate(workerId, update);
 
     return res.json({ success: true, approved: !!approved });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post('/admin/cancel-package', auth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const { workerId } = req.body;
+    if (!workerId) return res.status(400).json({ error: 'Worker ID is required' });
+
+    await Worker.findByIdAndUpdate(workerId, {
+      packageType: null,
+      packageExpiry: null,
+      packagePurchasedAt: null,
+      hasPurchasedPackage: false,
+      paymentStatus: null,
+      paymentProof: null,
+      paymentMeta: null
+    });
+
+    return res.json({ success: true, message: 'Package cancelled successfully' });
   } catch (err) {
     return next(err);
   }
