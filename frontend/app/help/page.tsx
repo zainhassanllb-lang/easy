@@ -89,7 +89,7 @@ export default function HelpPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs md:text-sm text-muted-foreground mb-2">Monday - Friday, 9am - 6pm</p>
-                  <p className="font-medium text-sm md:text-base">+92 300 1234567</p>
+                  <p className="font-medium text-sm md:text-base">+923108150464</p>
                 </CardContent>
               </Card>
 
@@ -102,7 +102,7 @@ export default function HelpPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs md:text-sm text-muted-foreground mb-2">Chat with us instantly</p>
-                  <p className="font-medium text-sm md:text-base">+92 300 1234567</p>
+                  <p className="font-medium text-sm md:text-base">+923108150464</p>
                 </CardContent>
               </Card>
             </div>
@@ -158,7 +158,7 @@ export default function HelpPage() {
                         <Input
                           id="phone"
                           type="tel"
-                          placeholder="+92 300 1234567"
+                          placeholder="+923108150464"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         />

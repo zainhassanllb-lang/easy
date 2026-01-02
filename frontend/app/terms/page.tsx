@@ -1,18 +1,20 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
+import { PageBanner } from "@/components/page-banner"
 
 export default function TermsPage() {
   return (
     <>
       <Header />
+
       <main className="min-h-screen">
-        <section className="bg-primary/5 py-12">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl font-bold mb-4">Terms & Conditions</h1>
-            <p className="text-muted-foreground">Last updated: January 2025</p>
-          </div>
-        </section>
+        <PageBanner
+          image="/services-banner.jpg"
+          title="Terms & Conditions"
+          description="Last updated: January 2025"
+          height="md"
+        />
 
         <div className="container mx-auto px-4 py-16">
           <Card className="max-w-4xl mx-auto">
