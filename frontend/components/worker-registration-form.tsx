@@ -322,7 +322,7 @@ export function WorkerRegistrationForm() {
           </Label>
           <Input
             id="name"
-            placeholder="Ahmad Khan"
+            placeholder="Name"
             value={formData.name}
             onChange={(e) => {
               const value = e.target.value

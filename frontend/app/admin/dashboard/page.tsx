@@ -183,7 +183,7 @@ export default async function AdminDashboard() {
         image="/admin-banner.jpg"
         title="Admin Dashboard"
         description="Manage workers, verifications, and platform operations"
-        height="sm"
+        height="md"
       />
 
       <main className="min-h-screen bg-muted/40">
