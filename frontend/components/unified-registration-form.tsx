@@ -120,7 +120,7 @@ export function UnifiedRegistrationForm() {
           <Label htmlFor="name">{t("fullName")} *</Label>
           <Input
             id="name"
-            placeholder="Ahmad Khan"
+            placeholder="Name"
             value={formData.name}
             onChange={(e) => {
               const value = e.target.value;

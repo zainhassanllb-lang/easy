@@ -7,7 +7,7 @@ export async function login(email: string, password: string) {
   const user = authenticateUser(email, password)
 
   if (!user) {
-    return { success: false, error: "Invalid credentials" }
+    return { success: false, error: "Invalid email or password" }
   }
 
   const cookieStore = await cookies()
