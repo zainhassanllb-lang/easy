@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ForgotPasswordForm } from "@/components/forgot-password-form"
 import { PageBanner } from "@/components/page-banner"
@@ -24,3 +24,4 @@ export default function ForgotPasswordPage() {
         </>
     )
 }
+

@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
 import { WorkerRegistrationForm } from "@/components/worker-registration-form"
@@ -38,3 +38,4 @@ export default function WorkerRegisterPage() {
     </>
   )
 }
+

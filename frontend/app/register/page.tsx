@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
 import { UnifiedRegistrationForm } from "@/components/unified-registration-form"
@@ -46,3 +46,4 @@ export default function RegisterPage() {
     </>
   )
 }
+

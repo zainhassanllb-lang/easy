@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     try {
@@ -18,3 +18,4 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: false, error: `Proxy error: ${error.message || 'Unknown'}` }, { status: 500 });
     }
 }
+

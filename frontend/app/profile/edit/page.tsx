@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { getClientById } from "@/lib/database"
 import { Header } from "@/components/header"
@@ -45,3 +45,4 @@ export default async function EditProfilePage() {
     </>
   )
 }
+

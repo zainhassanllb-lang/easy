@@ -70,8 +70,8 @@ export function VerificationList({ workers }: { workers: Worker[] }) {
                     ? (worker.profileImage.startsWith('http')
                       ? worker.profileImage
                       : worker.profileImage.startsWith('/')
-                        ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}${worker.profileImage}`
-                        : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}/uploads/workers/${worker.profileImage}`)
+                        ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}${worker.profileImage}`
+                        : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}/uploads/workers/${worker.profileImage}`)
                     : "/placeholder.svg"
                 }
                 alt={worker.name}
@@ -112,8 +112,8 @@ export function VerificationList({ workers }: { workers: Worker[] }) {
                             ? (selectedWorker.profileImage.startsWith('http')
                               ? selectedWorker.profileImage
                               : selectedWorker.profileImage.startsWith('/')
-                                ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}${selectedWorker.profileImage}`
-                                : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}/uploads/workers/${selectedWorker.profileImage}`)
+                                ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}${selectedWorker.profileImage}`
+                                : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}/uploads/workers/${selectedWorker.profileImage}`)
                             : "/placeholder.svg"
                         }
                         alt={selectedWorker.name}
@@ -160,8 +160,8 @@ export function VerificationList({ workers }: { workers: Worker[] }) {
                               const imageUrl = img.startsWith('http')
                                 ? img
                                 : img.startsWith('/')
-                                  ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}${img}`
-                                  : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}/uploads/workers/${img}`
+                                  ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}${img}`
+                                  : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}/uploads/workers/${img}`
                               return (
                                 <div key={idx} className="relative w-full h-40 rounded border overflow-hidden bg-muted">
                                   <Image
@@ -189,8 +189,8 @@ export function VerificationList({ workers }: { workers: Worker[] }) {
                                 selectedWorker.selfieImage.startsWith('http')
                                   ? selectedWorker.selfieImage
                                   : selectedWorker.selfieImage.startsWith('/')
-                                    ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}${selectedWorker.selfieImage}`
-                                    : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-e6lz.onrender.com"}/uploads/workers/${selectedWorker.selfieImage}`
+                                    ? `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}${selectedWorker.selfieImage}`
+                                    : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://easy-backend-pkd1.onrender.com"}/uploads/workers/${selectedWorker.selfieImage}`
                               }
                               alt="Worker Selfie"
                               fill

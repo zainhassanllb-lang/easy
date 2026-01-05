@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { VerificationUpload } from "@/components/verification-upload"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 async function getWorkerProfile() {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const { cookies } = await import("next/headers")
     const cookieStore = await cookies()
     const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ")
@@ -143,3 +143,4 @@ export default async function VerificationPage() {
     </main>
   )
 }
+

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
+﻿import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
     try {
-        const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+        const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
         const body = await request.json()
 
         const res = await fetch(`${backendUrl}/api/support`, {
@@ -20,3 +20,4 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, error: "Proxy error" }, { status: 500 })
     }
 }
+

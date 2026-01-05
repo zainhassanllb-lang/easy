@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+﻿import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
 export const runtime = "nodejs"
@@ -8,7 +8,7 @@ function cookieHeader(cookieStore: Awaited<ReturnType<typeof cookies>>) {
 }
 
 export async function GET(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
   const url = new URL(request.url)
 
   const workerId = url.searchParams.get("workerId") || ""
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
   const body = await request.json().catch(() => ({}))
   const workerId = String(body.workerId || "")
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+  const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
   const url = new URL(request.url)
   const workerId = url.searchParams.get("workerId") || ""
 
@@ -65,3 +65,4 @@ export async function DELETE(request: Request) {
   const data = await res.json().catch(() => ({}))
   return NextResponse.json(data, { status: res.status })
 }
+

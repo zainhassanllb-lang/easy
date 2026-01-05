@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
+﻿import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
 export async function GET() {
     try {
-        const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+        const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
 
         // Forward cookies for authentication
         const cookieStore = await cookies()
@@ -24,3 +24,4 @@ export async function GET() {
         return NextResponse.json({ success: false, error: "Proxy error" }, { status: 500 })
     }
 }
+

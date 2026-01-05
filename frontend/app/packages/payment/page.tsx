@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Header } from "@/components/header"
@@ -66,3 +66,4 @@ export default async function PaymentPage({ searchParams }: PageProps) {
     </>
   )
 }
+

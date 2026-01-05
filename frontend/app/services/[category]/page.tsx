@@ -22,7 +22,7 @@ interface PageProps {
 
 async function fetchWorkersByCategory(categorySlug: string, city?: string, locality?: string) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const params = new URLSearchParams()
     params.append("category", categorySlug)
     if (city) params.append("city", city)

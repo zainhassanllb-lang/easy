@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
 import { Card, CardContent } from "@/components/ui/card"
@@ -107,3 +107,4 @@ export default function HowItWorksPage() {
     </>
   )
 }
+

@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import { categories } from "@/lib/database"
@@ -15,7 +15,7 @@ interface SearchParams {
 
 async function fetchWorkersByLocation(city?: string, locality?: string) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const params = new URLSearchParams()
     if (city) params.append("city", city)
     if (locality) params.append("locality", locality)
@@ -111,3 +111,4 @@ export default async function ServicesPage({
     </>
   )
 }
+

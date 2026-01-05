@@ -1,11 +1,11 @@
-import { type NextRequest, NextResponse } from "next/server"
+﻿import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
 export const runtime = "nodejs"
 
 export async function POST(request: NextRequest) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const body = await request.text()
     
     // Forward cookies from the request
@@ -30,3 +30,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: "Proxy error" }, { status: 500 })
   }
 }
+

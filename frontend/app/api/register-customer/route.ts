@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server"
+﻿import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
 export const runtime = "nodejs"
 
 export async function POST(req: Request) {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const body = await req.text()
 
     const res = await fetch(`${backendUrl}/api/register-client`, {
@@ -52,3 +52,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, error: "Proxy error" }, { status: 500 })
   }
 }
+

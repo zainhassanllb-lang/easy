@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ServiceCategories } from "@/components/service-categories"
 import { FeaturedWorkers } from "@/components/featured-workers"
@@ -38,3 +38,4 @@ export default function Home() {
     </div>
   )
 }
+

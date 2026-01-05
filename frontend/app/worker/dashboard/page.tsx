@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import { DashboardStats } from "@/components/dashboard-stats"
 import { ProfileCard } from "@/components/profile-card"
@@ -14,7 +14,7 @@ import { AlertCircle, CheckCircle, Clock } from "lucide-react"
 
 async function getWorkerProfile() {
   try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-e6lz.onrender.com"
+    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const { cookies } = await import("next/headers")
     const cookieStore = await cookies()
     const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ")
@@ -323,3 +323,4 @@ export default async function WorkerDashboard() {
     </>
   )
 }
+

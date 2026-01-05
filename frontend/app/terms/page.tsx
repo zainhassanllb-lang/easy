@@ -1,4 +1,4 @@
-import { Header } from "@/components/header"
+﻿import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { PageBanner } from "@/components/page-banner"
@@ -81,3 +81,4 @@ export default function TermsPage() {
     </>
   )
 }
+
