@@ -15,9 +15,22 @@ export async function POST(req: Request) {
         });
 
         console.log(`[PROXY] Raw status: ${res.status}`);
-        const data = await res.json();
-        console.log(`[PROXY] Received from backend:`, data);
 
+        let data;
+        const responseText = await res.text();
+
+        try {
+            data = JSON.parse(responseText);
+        } catch (e) {
+            console.error("[PROXY] Failed to parse backend response:", responseText);
+            return NextResponse.json({
+                success: false,
+                error: `Backend returned non-JSON error: ${res.status}`,
+                details: responseText.substring(0, 200) // First 200 chars
+            }, { status: res.status === 200 ? 500 : res.status });
+        }
+
+        console.log(`[PROXY] Received from backend:`, data);
         return NextResponse.json(data, { status: res.status });
     } catch (error: any) {
         console.error("[PROXY] CRITICAL ERROR:", error.message);
