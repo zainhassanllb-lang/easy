@@ -159,55 +159,89 @@ export function WorkerCard({ worker }: WorkerCardProps) {
 
   return (
     <>
-      <Link href={`/worker/${worker.id}`}>
-        <Card className="group hover:shadow-lg transition-shadow duration-200 cursor-pointer overflow-hidden">
-          <CardContent className="p-5">
-            <div className="flex items-start gap-4 mb-5">
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
-                <Image
-                  src={
-                    worker.profileImage ||
-                    `/placeholder.svg?height=100&width=100&query=professional pakistani ${worker.category || "/placeholder.svg"} worker portrait smiling high quality`
-                  }
-                  alt={worker.name}
-                  fill
-                  className="object-cover"
-                />
+      <Link href={`/worker/${worker.id}`} className="block">
+        <Card className="group relative h-[520px] flex flex-col hover:shadow-2xl transition-all duration-500 border-none bg-background overflow-hidden ring-1 ring-slate-200/50">
+          {/* Magazine Cover Image Section */}
+          <div className="relative h-[280px] w-full overflow-hidden">
+            <Image
+              src={
+                worker.profileImage ||
+                `/placeholder.svg?height=400&width=400&query=professional pakistani ${worker.category || ""} worker portrait smiling`
+              }
+              alt={worker.name}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+            {/* Verification Badge */}
+            {worker.isVerified && (
+              <div className="absolute top-4 left-4 bg-green-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg animate-in fade-in slide-in-from-left-2 duration-300">
+                <CheckCircle2 className="h-3.5 w-3.5 fill-white text-green-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Verified Pro</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-base truncate">{worker.name}</h3>
-                  {worker.isVerified && <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />}
+            )}
+
+            {/* Package Badge (if any) */}
+            {worker.packageType && (
+              <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg border border-white/20">
+                <Star className="h-3.5 w-3.5 fill-white text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest">{worker.packageType}</span>
+              </div>
+            )}
+
+            {/* Bottom Info Overlay */}
+            <div className="absolute bottom-4 left-4 right-4">
+              <span className="inline-block px-2 py-1 rounded bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase font-bold tracking-tighter mb-2">
+                {worker.category}
+              </span>
+              <h3 className="text-xl font-black text-white leading-tight drop-shadow-md group-hover:text-primary transition-colors line-clamp-1">
+                {worker.name}
+              </h3>
+            </div>
+          </div>
+
+          <CardContent className="flex-1 p-6 flex flex-col justify-between bg-white relative">
+            {/* Quick Stats Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-slate-500">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-xs font-bold truncate max-w-[120px]">{worker.locality}</span>
                 </div>
-                <p className="text-sm text-muted-foreground capitalize mb-1">{worker.category}</p>
-                <p className="text-xs text-muted-foreground capitalize">
-                  {worker.locality}, {worker.city}
-                </p>
+                <div className="flex items-center gap-1 text-amber-500">
+                  <Star className="h-4 w-4 fill-amber-500" />
+                  <span className="text-sm font-black">{worker.rating || "N/A"}</span>
+                </div>
+              </div>
+
+              <div className="h-px bg-slate-100" />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Experience</div>
+                  <div className="flex items-center gap-1.5 font-black text-slate-800">
+                    <Briefcase className="h-3.5 w-3.5 text-primary" />
+                    <span>{worker.experience}+ YRS</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Availability</div>
+                  <div className="flex items-center gap-1.5 font-black text-slate-800">
+                    <Clock className="h-3.5 w-3.5 text-primary" />
+                    <span>Anytime</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <div className="flex items-center gap-2 p-3 rounded-lg border bg-background">
-                <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <div>
-                  <div className="text-sm font-semibold">{worker.experience}+ years</div>
-                  <div className="text-xs text-muted-foreground">Experience</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 p-3 rounded-lg border bg-background">
-                <Star className="h-4 w-4 text-amber-500 flex-shrink-0" />
-                <div>
-                  <div className="text-sm font-semibold">{worker.rating}</div>
-                  <div className="text-xs text-muted-foreground">Rating</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
+            {/* Action Buttons Section */}
+            <div className="grid grid-cols-2 gap-3 mt-6 relative z-10">
               <Button
                 variant="outline"
-                size="sm"
-                className="w-full bg-transparent"
+                className="w-full h-11 border-2 border-slate-200 text-slate-900 font-black rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
@@ -216,11 +250,10 @@ export function WorkerCard({ worker }: WorkerCardProps) {
                 }}
               >
                 <Phone className="h-4 w-4 mr-2" />
-                Call
+                CALL
               </Button>
               <Button
-                size="sm"
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full h-11 bg-green-600 hover:bg-green-700 text-white font-black rounded-xl shadow-lg shadow-green-200 transition-all duration-300 active:scale-95"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
@@ -229,12 +262,15 @@ export function WorkerCard({ worker }: WorkerCardProps) {
                 }}
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
+                CHAT
               </Button>
             </div>
           </CardContent>
+
+          {/* Hover Reveal Effect - Moved before content or added z-index to content */}
+          <div className="absolute inset-0 bg-primary/5 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
         </Card>
-      </Link >
+      </Link>
 
       <Dialog open={isCallDialogOpen} onOpenChange={setIsCallDialogOpen}>
         <DialogContent className="w-[95%] max-w-[500px] bg-white p-8 md:p-12 rounded-[3rem] overflow-hidden border-none shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] gap-0">

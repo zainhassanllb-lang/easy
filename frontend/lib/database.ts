@@ -25,6 +25,9 @@ export interface Worker {
   hasPurchasedPackage: boolean
   paymentProof: string | null
   paymentStatus: "pending" | "verified" | "rejected" | null
+  paymentMethod: "jazzcash" | "easypaisa" | "bank" | null
+  phoneNumber?: string | null
+  accountNumber?: string | null
   profileViews: number
   profileClicks: number
   contactClicks: number

@@ -11,6 +11,7 @@ import { PageBanner } from "@/components/page-banner"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { AlertCircle, CheckCircle, Clock } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
 async function getWorkerProfile() {
   try {
@@ -123,7 +124,7 @@ export default async function WorkerDashboard() {
   const daysUntilExpiry = getDaysUntilExpiry(worker)
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-muted/5">
       <Header />
 
       <PageBanner
@@ -133,194 +134,195 @@ export default async function WorkerDashboard() {
         height="md"
       />
 
-      <main className="min-h-screen bg-muted/40">
-        <div className="container mx-auto px-4 py-8">
-          {worker.paymentStatus === "pending" && (
-            <Alert variant="default" className="mb-6 border-orange-500 bg-orange-50">
-              <Clock className="h-4 w-4 text-orange-600" />
-              <AlertTitle className="text-orange-900">Payment Verification Pending</AlertTitle>
-              <AlertDescription className="text-orange-800">
-                Your payment proof is under review by the admin team. Once approved, your profile will be visible to
-                customers.
-              </AlertDescription>
-            </Alert>
-          )}
+      <main className="flex-1 py-12">
+        <div className="container mx-auto px-4 max-w-6xl">
 
-          {worker.paymentStatus === "rejected" && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Payment Check Failed</AlertTitle>
-              <AlertDescription>
-                Your payment proof was rejected. Please try again or contact support.
-                <Link href="/packages" className="block mt-3">
-                  <Button size="sm" variant="outline" className="border-red-600 text-red-900 bg-white hover:bg-red-50">
-                    Retry Payment
+          {/* Status Alerts Section */}
+          <div className="space-y-4 mb-10">
+            {worker.paymentStatus === "pending" && (
+              <Alert variant="default" className="border-orange-500/50 bg-orange-50 dark:bg-orange-950/20">
+                <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                <AlertTitle className="text-orange-900 dark:text-orange-100 font-semibold ml-2">Payment Verification Pending</AlertTitle>
+                <AlertDescription className="text-orange-800 dark:text-orange-200 ml-2 mt-1">
+                  Your payment proof is under review. Once approved, your profile will be public.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {worker.paymentStatus === "rejected" && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-5 w-5" />
+                <AlertTitle className="font-semibold ml-2">Payment Check Failed</AlertTitle>
+                <AlertDescription className="ml-2 mt-1 flex items-center justify-between flex-wrap gap-4">
+                  <span>Your payment proof was rejected. Please try again.</span>
+                  <Button asChild size="sm" variant="outline" className="bg-background">
+                    <Link href="/packages">Retry Payment</Link>
                   </Button>
-                </Link>
-              </AlertDescription>
-            </Alert>
-          )}
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {worker.verificationStatus === "rejected" && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Verification Rejected</AlertTitle>
-              <AlertDescription>
-                Your verification documents were rejected by our admin team. Please re-submit your documents with the
-                correct information.
-                <Link href="/worker/verification" className="block mt-3">
-                  <Button size="sm" variant="outline" className="border-red-600 text-red-900 bg-white hover:bg-red-50">
-                    Re-submit Documents
+            {worker.verificationStatus === "rejected" && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-5 w-5" />
+                <AlertTitle className="font-semibold ml-2">Verification Rejected</AlertTitle>
+                <AlertDescription className="ml-2 mt-1 flex items-center justify-between flex-wrap gap-4">
+                  <span>Your documents were rejected. Please re-submit correct information.</span>
+                  <Button asChild size="sm" variant="outline" className="bg-background">
+                    <Link href="/worker/verification">Re-submit Documents</Link>
                   </Button>
-                </Link>
-              </AlertDescription>
-            </Alert>
-          )}
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {worker.verificationStatus === "pending" && !worker.isVerified && (
-            <Alert variant="default" className="mb-6 border-yellow-500 bg-yellow-50">
-              <Clock className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-900">Verification Pending</AlertTitle>
-              <AlertDescription className="text-yellow-800">
-                Your profile is under review by our admin team. You cannot purchase a package until verified.
-              </AlertDescription>
-            </Alert>
-          )}
+            {worker.verificationStatus === "pending" && !worker.isVerified && (
+              <Alert variant="default" className="border-yellow-500/50 bg-yellow-50 dark:bg-yellow-950/20">
+                <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                <AlertTitle className="text-yellow-900 dark:text-yellow-100 font-semibold ml-2">Verification Pending</AlertTitle>
+                <AlertDescription className="text-yellow-800 dark:text-yellow-200 ml-2 mt-1">
+                  Your profile is being reviewed. You'll be able to purchase a package once verified.
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {worker.isVerified && !worker.hasPurchasedPackage && (
-            <Alert className="mb-6 border-blue-500 bg-blue-50">
-              <CheckCircle className="h-4 w-4 text-blue-600" />
-              <AlertTitle className="text-blue-900">Profile Verified!</AlertTitle>
-              <AlertDescription className="text-blue-800">
-                Your profile is verified. Purchase a package to make your profile visible to customers.
-                <Link href="/packages" className="block mt-3">
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    Choose Package
+            {packageExpired && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-5 w-5" />
+                <AlertTitle className="font-semibold ml-2">Package Expired</AlertTitle>
+                <AlertDescription className="ml-2 mt-1 flex items-center justify-between flex-wrap gap-4">
+                  <span>Your profile is currently hidden. Renew your package to be visible again.</span>
+                  <Button asChild size="sm" className="bg-white text-destructive hover:bg-gray-100 dark:bg-destructive-foreground dark:text-destructive">
+                    <Link href="/packages">Renew Package</Link>
                   </Button>
-                </Link>
-              </AlertDescription>
-            </Alert>
-          )}
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {packageExpired && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Package Expired</AlertTitle>
-              <AlertDescription>
-                Your package has expired. Your profile is no longer visible to customers. Please renew your package to
-                continue receiving leads.
-              </AlertDescription>
-              <Link href="/packages" className="mt-3 inline-block">
-                <Button size="sm">Renew Package</Button>
-              </Link>
-            </Alert>
-          )}
+            {!packageExpired && daysUntilExpiry <= 7 && daysUntilExpiry > 0 && (
+              <Alert className="border-yellow-500/50 bg-yellow-50 dark:bg-yellow-950/20">
+                <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                <AlertTitle className="text-yellow-900 dark:text-yellow-100 font-semibold ml-2">Package Expiring Soon</AlertTitle>
+                <AlertDescription className="text-yellow-800 dark:text-yellow-200 ml-2 mt-1 flex items-center justify-between flex-wrap gap-4">
+                  <span>Your package expires in {daysUntilExpiry} days.</span>
+                  <Button asChild size="sm" variant="outline" className="border-yellow-600 text-yellow-900 hover:bg-yellow-100">
+                    <Link href="/packages">Renew Now</Link>
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
 
-          {!packageExpired && daysUntilExpiry <= 7 && daysUntilExpiry > 0 && (
-            <Alert className="mb-6 border-yellow-500 bg-yellow-50">
-              <Clock className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-900">Package Expiring Soon</AlertTitle>
-              <AlertDescription className="text-yellow-800">
-                Your package will expire in {daysUntilExpiry} {daysUntilExpiry === 1 ? "day" : "days"}. Renew now to
-                avoid service interruption.
-              </AlertDescription>
-              <Link href="/packages" className="mt-3 inline-block">
-                <Button size="sm" variant="outline" className="border-yellow-600 text-yellow-900 bg-transparent">
-                  Renew Now
-                </Button>
-              </Link>
-            </Alert>
-          )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Stats */}
-              <DashboardStats worker={worker} />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Column - Stats & Quick Actions */}
+            <div className="lg:col-span-8 space-y-8">
 
-              {/* Profile Preview */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your Profile</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ProfileCard worker={worker} />
-                </CardContent>
-              </Card>
+              {/* Quick Actions Grid */}
+              <section>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold tracking-tight">Quick Actions</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Link href="/worker/edit-profile" className="contents">
+                    <Card className="hover:shadow-md transition-all cursor-pointer hover:border-primary/50 group">
+                      <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <CheckCircle className="h-5 w-5" />
+                        </div>
+                        <span className="font-medium text-sm">Edit Profile</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
 
-              {worker.verificationStatus === "pending" && !worker.isVerified && (
-                <Card className="border-yellow-500/50 bg-yellow-500/5">
-                  <CardHeader>
-                    <CardTitle className="text-yellow-600">Verification Pending</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Your profile is under review. Please upload your CNIC documents to get verified.
-                    </p>
-                    <Link href="/worker/verification">
-                      <Button>Upload Documents</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              )}
+                  <Link href="/packages" className="contents">
+                    <Card className="hover:shadow-md transition-all cursor-pointer hover:border-primary/50 group">
+                      <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <Clock className="h-5 w-5" />
+                        </div>
+                        <span className="font-medium text-sm">Packages</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
 
-              {worker.isVerified && !worker.hasPurchasedPackage && (
-                <Card className="border-blue-500/50 bg-blue-500/5">
-                  <CardHeader>
-                    <CardTitle className="text-blue-600 flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
-                      Verified! Now Choose a Package
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Congratulations! Your profile is verified. To make your profile visible to customers, please
-                      purchase a package.
-                    </p>
-                    <Link href="/packages">
-                      <Button>Choose Package</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              )}
+                  <Link href="/worker/verification" className="contents">
+                    <Card className="hover:shadow-md transition-all cursor-pointer hover:border-primary/50 group">
+                      <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <AlertCircle className="h-5 w-5" />
+                        </div>
+                        <span className="font-medium text-sm">Verification</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+
+                  <Link href={`/worker/${worker.id}`} className="contents">
+                    <Card className="hover:shadow-md transition-all cursor-pointer hover:border-primary/50 group">
+                      <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <Clock className="h-5 w-5" />
+                        </div>
+                        <span className="font-medium text-sm">View Public Profile</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </div>
+              </section>
+
+              {/* Stats Section */}
+              <section>
+                <h2 className="text-xl font-bold tracking-tight mb-4">Analytics Overview</h2>
+                <DashboardStats worker={worker} />
+              </section>
+
+              {/* Recent Reviews or Activity could go here */}
+
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Package Info */}
-              <PackageCard worker={worker} />
+            {/* Right Column - Profile Snapshot & Package */}
+            <div className="lg:col-span-4 space-y-8">
 
-              {/* Quick Links */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Links</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
+              {/* Profile Snapshot */}
+              <Card className="overflow-hidden border-none shadow-lg">
+                <div className="h-24 bg-gradient-to-r from-primary/80 to-primary/40" />
+                <CardContent className="relative pt-0 px-6 pb-6">
+                  <div className="absolute -top-12 left-6 border-4 border-background rounded-full overflow-hidden h-24 w-24">
+                    {/* Use a simpleimg tag or Avatar here since we might not have the complexity of ProfileCard */}
+                    <img src={worker.profileImage || "/placeholder.svg"} alt={worker.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="mt-14 mb-4">
+                    <h3 className="text-xl font-bold">{worker.name}</h3>
+                    <p className="text-muted-foreground capitalize">{worker.category} • {worker.city}</p>
+                  </div>
 
-                  <Link href="/worker/verification" className="block">
-                    <Button variant="ghost" className="w-full justify-start">
-                      Verification
-                    </Button>
-                  </Link>
-                  <Link href="/register/worker" className="block">
-                    <Button variant="ghost" className="w-full justify-start">
-                      Edit Profile
-                    </Button>
-                  </Link>
-                  <Link href="/packages" className="block">
-                    <Button variant="ghost" className="w-full justify-start">
-                      View Packages
-                    </Button>
-                  </Link>
+                  <div className="space-y-3 pt-4 border-t">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Status</span>
+                      <Badge variant={worker.isVerified ? "default" : "outline"} className={worker.isVerified ? "bg-green-600" : ""}>
+                        {worker.isVerified ? "Verified" : "Unverified"}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Member Since</span>
+                      <span className="font-medium">{worker.createdAt ? new Date(worker.createdAt).toLocaleDateString() : 'N/A'}</span>
+                    </div>
+                  </div>
+
+                  <Button asChild className="w-full mt-6" variant="outline">
+                    <Link href="/worker/edit-profile">Edit Full Profile</Link>
+                  </Button>
                 </CardContent>
               </Card>
+
+              {/* Current Package */}
+              <PackageCard worker={worker} />
             </div>
           </div>
         </div>
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }
 

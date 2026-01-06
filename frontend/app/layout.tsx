@@ -25,8 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        <LanguageProvider>{children}</LanguageProvider>
+      <body className={`font-sans antialiased min-h-screen flex flex-col`}>
+        <LanguageProvider>
+          <div className="flex-1 flex flex-col">{children}</div>
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>
