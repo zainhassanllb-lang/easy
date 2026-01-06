@@ -11,27 +11,19 @@ export default function WorkerRegisterPage() {
       <Header />
       <PageBanner
         image="/auth-banner.jpg"
-        title="Edit Your Profile"
+        title="Worker Registration"
         description="Create your account to get started"
         height="md"
       />
       <main className="min-h-screen bg-muted/40 py-12 px-4">
-        <div className="container mx-auto max-w-2xl">
-          <Card>
-            <CardHeader>
-              <CardTitle>Worker Registration</CardTitle>
-              <CardDescription>Complete your profile to start receiving customer inquiries</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <WorkerRegistrationForm />
-              <div className="mt-6 text-center text-sm">
-                <span className="text-muted-foreground">Already have an account? </span>
-                <Link href="/login" className="text-primary hover:underline">
-                  Sign in
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="container mx-auto max-w-3xl">
+          <WorkerRegistrationForm />
+          <div className="mt-8 text-center text-sm">
+            <span className="text-muted-foreground">Already have an account? </span>
+            <Link href="/login" className="text-primary hover:underline font-medium">
+              Sign in
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />

@@ -19,7 +19,7 @@ export function PackageCard({ worker }: { worker: Worker }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Package imran </CardTitle>
+        <CardTitle>Your Package</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {worker.packageType ? (

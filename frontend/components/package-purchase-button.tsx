@@ -10,7 +10,7 @@ export function PackagePurchaseButton({ packageType }: PackagePurchaseButtonProp
   const router = useRouter()
 
   function handlePurchase() {
-    const prices = { basic: 2000, standard: 4000, premium: 7000 }
+    const prices = { basic: 2000, standard: 3000, premium: 7000 }
     router.push(`/packages/payment?package=${packageType}&price=${prices[packageType]}`)
   }
 

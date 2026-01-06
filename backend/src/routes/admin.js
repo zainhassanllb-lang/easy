@@ -135,5 +135,26 @@ router.get('/admin/support-messages', auth, requireRole('admin'), async (req, re
   }
 });
 
+router.patch('/admin/support-messages/:id', auth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    const message = await SupportMessage.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    if (!message) return res.status(404).json({ error: 'Message not found' });
+    return res.json({ success: true, message });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.delete('/admin/support-messages/:id', auth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const message = await SupportMessage.findByIdAndDelete(req.params.id);
+    if (!message) return res.status(404).json({ error: 'Message not found' });
+    return res.json({ success: true, message: 'Message deleted' });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = router;
 

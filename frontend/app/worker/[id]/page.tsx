@@ -112,16 +112,7 @@ export default async function WorkerProfilePage({ params }: PageProps) {
         description={`Professional ${worker.category} | ${worker.locality}, ${worker.city}`}
         height="md"
       >
-        {isOwnProfile && (
-          <div className="flex justify-center mt-6">
-            <Link href="/worker/edit-profile">
-              <Button className="bg-white text-primary hover:bg-white/90 min-w-[180px]" size="lg">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Profile
-              </Button>
-            </Link>
-          </div>
-        )}
+        {/* Edit Profile button removed as per requirements */}
       </PageBanner>
 
       <main className="min-h-screen bg-muted/40">

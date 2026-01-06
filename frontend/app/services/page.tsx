@@ -96,10 +96,27 @@ export default async function ServicesPage({
           </div>
 
           {workers.length > 0 && (
-            <div className="mt-16">
-              <h2 className="text-2xl font-bold mb-6">Available Workers</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {workers.map((worker: any) => (
+            <div className="mt-16 space-y-12">
+              <div className="flex items-end justify-between border-b pb-6">
+                <div>
+                  <h2 className="text-4xl font-black tracking-tight mb-2">Recommended Experts</h2>
+                  <p className="text-muted-foreground font-medium">Top-rated professionals exactly in your selected location.</p>
+                </div>
+                <div className="hidden md:block">
+                  <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full font-bold text-sm">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    {workers.length} Professionals Online
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid with improved scalability */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                {/* Prioritize Featured Workers (those with packageType) */}
+                {[...workers].sort((a, b) => (b.packageType ? 1 : 0) - (a.packageType ? 1 : 0)).map((worker: any) => (
                   <WorkerCard key={worker.id} worker={worker} />
                 ))}
               </div>

@@ -37,7 +37,7 @@ async function seedPackages() {
     },
     {
       name: 'standard',
-      price: 5000,
+      price: 3000,
       duration: 30,
       rank: 2,
       features: [

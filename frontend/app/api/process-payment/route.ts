@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
     const body = await request.text()
-    
+
     // Forward cookies from the request
     const cookieStore = await cookies()
     const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ")
@@ -22,12 +22,26 @@ export async function POST(request: Request) {
     })
 
     const text = await res.text()
-    return new NextResponse(text, {
+
+    // Log non-ok responses from backend
+    if (!res.ok) {
+      console.error(`Backend error (${res.status}):`, text)
+    }
+
+    let data
+    try {
+      data = JSON.parse(text)
+    } catch (e) {
+      return NextResponse.json({ success: false, error: "Invalid response from backend" }, { status: 500 })
+    }
+
+    return NextResponse.json(data, {
       status: res.status,
-      headers: { "Content-Type": res.headers.get("content-type") || "application/json" },
+      headers: { "Content-Type": "application/json" },
     })
   } catch (error) {
-    return NextResponse.json({ success: false, error: "Proxy error" }, { status: 500 })
+    console.error("Payment proxy error:", error)
+    return NextResponse.json({ success: false, error: "Payment submission failed (Proxy)" }, { status: 500 })
   }
 }
 
