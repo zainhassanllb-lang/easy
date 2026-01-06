@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { categories } from "@/lib/database"
 import { LocationFilter } from "@/components/location-filter"
 import { WorkerCard } from "@/components/worker-card"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, MapPin } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
@@ -111,7 +111,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
             {workers.length > 0 ? (
               <div className="space-y-16">
                 {/* Featured Section if any workers have premium/standard packages */}
-                {workers.some(w => w.packageType === 'premium' || w.packageType === 'standard') && (
+                {workers.some((w: any) => w.packageType === 'premium' || w.packageType === 'standard') && (
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
                       <div className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-200" />
@@ -120,7 +120,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                       {workers
-                        .filter(w => w.packageType === 'premium' || w.packageType === 'standard')
+                        .filter((w: any) => w.packageType === 'premium' || w.packageType === 'standard')
                         .map((worker: any) => (
                           <WorkerCard key={worker.id} worker={worker} />
                         ))}
@@ -131,7 +131,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                 {/* Main Results Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
                   {workers
-                    .filter(w => !(w.packageType === 'premium' || w.packageType === 'standard'))
+                    .filter((w: any) => !(w.packageType === 'premium' || w.packageType === 'standard'))
                     .map((worker: any) => (
                       <WorkerCard key={worker.id} worker={worker} />
                     ))}
