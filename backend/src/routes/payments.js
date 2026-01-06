@@ -29,11 +29,19 @@ router.post('/process-payment', auth, requireRole('worker'), async (req, res, ne
     if (!pkg) return res.status(400).json({ error: 'Invalid package' });
 
     // Save proof image to Cloudinary
-    // Cloudinary accepts data URIs directly
-    const uploadRes = await cloudinary.uploader.upload(data.paymentProof, {
-      folder: 'easy/payments',
-      resource_type: 'image'
-    });
+    let uploadRes;
+    try {
+      uploadRes = await cloudinary.uploader.upload(data.paymentProof, {
+        folder: 'easy/payments',
+        resource_type: 'image'
+      });
+    } catch (uploadErr) {
+      console.error('Cloudinary upload error:', uploadErr);
+      return res.status(500).json({
+        error: 'Failed to upload payment proof. Please check image format and size.',
+        details: uploadErr.message
+      });
+    }
 
     const proofPath = uploadRes.secure_url;
 
