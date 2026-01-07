@@ -1,7 +1,7 @@
-const { Resend } = require("resend");
+const nodemailer = require('nodemailer');
 
 /**
- * Sends an email using the Resend service.
+ * Sends an email using Nodemailer (configured for Gmail by default).
  * @param {Object} options - Email options
  * @param {string} options.email - Recipient email address
  * @param {string} options.subject - Email subject
@@ -9,33 +9,36 @@ const { Resend } = require("resend");
  * @param {string} [options.html] - Optional HTML content
  */
 const sendEmail = async (options) => {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM || "onboarding@resend.dev";
+  // Config from env
+  const config = {
+    service: process.env.EMAIL_SERVICE || 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  };
 
-  if (!apiKey) {
-    console.error("[EMAIL] Missing RESEND_API_KEY in environment variables");
-    throw new Error("Email service is not configured (missing API key)");
+  if (!config.auth.user || !config.auth.pass) {
+    console.error('[EMAIL] Missing EMAIL_USER or EMAIL_PASS in environment variables');
+    throw new Error('Email service is not configured (missing credentials)');
   }
 
-  const resend = new Resend(apiKey);
+  const transporter = nodemailer.createTransport(config);
+
+  const mailOptions = {
+    from: `"Easy App" <${process.env.EMAIL_USER}>`,
+    to: options.email,
+    subject: options.subject,
+    text: options.message,
+    html: options.html
+  };
 
   try {
-    const { data, error } = await resend.emails.send({
-      from,
-      to: [options.email],
-      subject: options.subject,
-      text: options.message,
-      html: options.html || undefined,
-    });
-
-    if (error) {
-      console.error("[RESEND ERROR]", error);
-      throw new Error(error.message || "Failed to send email via Resend");
-    }
-
-    return data;
+    const info = await transporter.sendMail(mailOptions);
+    // console.log('[EMAIL] Sent:', info.messageId);
+    return info;
   } catch (err) {
-    console.error("[EMAIL ERROR]", err.message);
+    console.error('[EMAIL ERROR]', err.message);
     throw err;
   }
 };
