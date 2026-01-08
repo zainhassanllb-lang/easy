@@ -20,37 +20,7 @@ interface PageProps {
   }>
 }
 
-async function fetchWorkersByCategory(categorySlug: string, city?: string, locality?: string) {
-  try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
-    const params = new URLSearchParams()
-    params.append("category", categorySlug)
-    if (city) params.append("city", city)
-    if (locality) params.append("locality", locality)
-
-    const res = await fetch(`${backendUrl}/api/workers?${params.toString()}`, {
-      method: "GET",
-      cache: "no-store",
-    })
-
-    if (!res.ok) {
-      return []
-    }
-
-    const data = await res.json()
-    // Convert MongoDB _id to id and dates for compatibility
-    return (data.workers || []).map((w: any) => ({
-      ...w,
-      id: w._id?.toString() || w.id,
-      packageExpiry: w.packageExpiry ? (typeof w.packageExpiry === 'string' ? new Date(w.packageExpiry) : w.packageExpiry) : null,
-      verifiedAt: w.verifiedAt ? (typeof w.verifiedAt === 'string' ? new Date(w.verifiedAt) : w.verifiedAt) : null,
-      createdAt: w.createdAt ? (typeof w.createdAt === 'string' ? new Date(w.createdAt) : w.createdAt) : null,
-    }))
-  } catch (error) {
-    console.error("Failed to fetch workers:", error)
-    return []
-  }
-}
+import { getWorkers } from "@/lib/api"
 
 export default async function CategoryPage({ params, searchParams }: PageProps) {
   const { category: categorySlug } = await params
@@ -62,7 +32,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     notFound()
   }
 
-  const workers = await fetchWorkersByCategory(category.slug, city, locality)
+  const workers = await getWorkers({ category: category.slug, city, locality })
 
   return (
     <>

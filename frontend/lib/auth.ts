@@ -1,70 +1,11 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { authenticateUser, registerUser } from "./database"
-
-export async function login(email: string, password: string) {
-  const user = authenticateUser(email, password)
-
-  if (!user) {
-    return { success: false, error: "Invalid email or password" }
-  }
-
-  const cookieStore = await cookies()
-  cookieStore.set("userId", user.id, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 1 week
-  })
-  cookieStore.set("userRole", user.role, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7,
-  })
-  if (user.profileId) {
-    cookieStore.set("profileId", user.profileId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    })
-  }
-
-  return { success: true, user: { id: user.id, email: user.email, role: user.role } }
-}
-
-export async function register(email: string, password: string, role: "worker" | "client", profileId?: string) {
-  const user = registerUser(email, password, role, profileId)
-
-  const cookieStore = await cookies()
-  cookieStore.set("userId", user.id, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7,
-  })
-  cookieStore.set("userRole", user.role, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7,
-  })
-  if (user.profileId) {
-    cookieStore.set("profileId", user.profileId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    })
-  }
-
-  return { success: true, user: { id: user.id, email: user.email, role: user.role, profileId: user.profileId } }
-}
-
 export async function logout() {
   const cookieStore = await cookies()
+  const cookieName = process.env.COOKIE_NAME || "easy_token"
+  cookieStore.delete(cookieName)
+  // Also delete old legacy cookies just in case
   cookieStore.delete("userId")
   cookieStore.delete("userRole")
   cookieStore.delete("profileId")

@@ -13,7 +13,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Mail, CheckCircle, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, CheckCircle, ShieldCheck, Lock } from "lucide-react";
 import Link from "next/link";
 
 type Step = "email" | "otp" | "reset";
@@ -193,31 +193,34 @@ export function ForgotPasswordForm() {
 
             <CardContent>
                 {error && (
-                    <div className="mb-4 p-3 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
+                    <div className="mb-4 p-2 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
                         {error}
                     </div>
                 )}
                 {message && !error && (
-                    <div className="mb-4 p-3 bg-primary/10 text-primary text-sm rounded-lg border border-primary/20">
+                    <div className="mb-4 p-2 bg-primary/10 text-primary text-sm rounded-lg border border-primary/20">
                         {message}
                     </div>
                 )}
 
                 {step === "email" && (
                     <form onSubmit={handleEmailSubmit} className="space-y-4">
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <Label htmlFor="email">Email Address</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="name@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                className="h-12"
-                            />
+                            <div className="relative group">
+                                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    className="pl-10 h-10"
+                                />
+                            </div>
                         </div>
-                        <Button type="submit" className="w-full h-12" disabled={loading}>
+                        <Button type="submit" className="w-full h-10" disabled={loading}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Send Code"}
                         </Button>
                     </form>
@@ -225,7 +228,7 @@ export function ForgotPasswordForm() {
 
                 {step === "otp" && (
                     <form onSubmit={handleOtpSubmit} className="space-y-4">
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <Label htmlFor="otp">Verification Code</Label>
                             <Input
                                 id="otp"
@@ -235,7 +238,7 @@ export function ForgotPasswordForm() {
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
                                 required
-                                className="h-12 text-center text-2xl tracking-[10px] font-bold"
+                                className="h-10 text-center text-xl tracking-[8px] font-bold"
                             />
                         </div>
 
@@ -248,7 +251,7 @@ export function ForgotPasswordForm() {
                             )}
                         </div>
 
-                        <Button type="submit" className="w-full h-12" disabled={loading || otpSecondsLeft <= 0}>
+                        <Button type="submit" className="w-full h-10" disabled={loading || otpSecondsLeft <= 0}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Verify Code"}
                         </Button>
 
@@ -267,31 +270,39 @@ export function ForgotPasswordForm() {
 
                 {step === "reset" && (
                     <form onSubmit={handleResetSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="password">New Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="h-12"
-                            />
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="password">New Password</Label>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        className="pl-10 h-10"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Input
+                                        id="confirmPassword"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required
+                                        className="pl-10 h-10"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirm Password</Label>
-                            <Input
-                                id="confirmPassword"
-                                type="password"
-                                placeholder="••••••••"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                className="h-12"
-                            />
-                        </div>
-                        <Button type="submit" className="w-full h-12" disabled={loading}>
+                        <Button type="submit" className="w-full h-10" disabled={loading}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Reset Password"}
                         </Button>
                     </form>

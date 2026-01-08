@@ -11,76 +11,13 @@ import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
 import { ReviewsSection } from "@/components/reviews-section"
 import { ContactActions } from "@/components/contact-actions"
+import { getWorkerById } from "@/lib/api"
 import { getCurrentUser } from "@/lib/auth"
 
 interface PageProps {
   params: Promise<{
     id: string
   }>
-}
-
-async function getWorkerById(id: string) {
-  try {
-    const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
-
-    const res = await fetch(`${backendUrl}/api/workers/${id}`, {
-      method: "GET",
-      cache: "no-store",
-    })
-
-    if (!res.ok) {
-      return null
-    }
-
-    const data = await res.json()
-    const worker = data.worker || null
-
-    if (!worker) {
-      return null
-    }
-
-    // Convert MongoDB _id to id for compatibility
-    if (worker._id) {
-      worker.id = worker._id.toString()
-    }
-
-    // Convert date strings to Date objects for compatibility
-    if (worker.packageExpiry && typeof worker.packageExpiry === 'string') {
-      worker.packageExpiry = new Date(worker.packageExpiry)
-    }
-    if (worker.verifiedAt && typeof worker.verifiedAt === 'string') {
-      worker.verifiedAt = new Date(worker.verifiedAt)
-    }
-    if (worker.createdAt && typeof worker.createdAt === 'string') {
-      worker.createdAt = new Date(worker.createdAt)
-    }
-
-    // Ensure skills is an array
-    if (typeof worker.skills === 'string') {
-      worker.skills = worker.skills.split(',').map((s: string) => s.trim()).filter(Boolean)
-    }
-    if (!Array.isArray(worker.skills)) {
-      worker.skills = []
-    }
-
-    // Ensure locality is an array
-    if (typeof worker.locality === 'string') {
-      worker.locality = [worker.locality]
-    }
-    if (!Array.isArray(worker.locality)) {
-      worker.locality = []
-    }
-
-    // Handle image URLs - prepend backend URL if needed
-    if (worker.profileImage && !worker.profileImage.startsWith('http') && !worker.profileImage.startsWith('/')) {
-      worker.profileImage = `${backendUrl}${worker.profileImage.startsWith('/') ? '' : '/'}${worker.profileImage}`
-    }
-
-    return worker
-  } catch (error) {
-    console.error("Failed to fetch worker:", error)
-    return null
-  }
 }
 
 export const dynamicParams = true

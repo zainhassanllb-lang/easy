@@ -11,61 +11,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Info } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-async function getWorkerProfile() {
-    try {
-        const backendUrl = process.env.BACKEND_URL || "https://easy-backend-pkd1.onrender.com"
-        const { cookies } = await import("next/headers")
-        const cookieStore = await cookies()
-        const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ")
-
-        // First get current user to get profileId
-        const userRes = await fetch(`${backendUrl}/api/current-user`, {
-            method: "GET",
-            headers: {
-                Cookie: cookieHeader,
-            },
-            cache: "no-store",
-        })
-
-        const userData = await userRes.json()
-
-        if (!userData.user || userData.user.role !== "worker" || !userData.user.profileId) {
-            return null
-        }
-
-        // Fetch worker profile by ID
-        const workerRes = await fetch(`${backendUrl}/api/workers/${userData.user.profileId}`, {
-            method: "GET",
-            headers: {
-                Cookie: cookieHeader,
-            },
-            cache: "no-store",
-        })
-
-        if (!workerRes.ok) {
-            return null
-        }
-
-        const workerData = await workerRes.json()
-        const worker = workerData.worker || null
-
-        if (worker) {
-            if (worker._id) worker.id = worker._id.toString()
-            // Ensure arrays
-            if (typeof worker.skills === 'string') {
-                worker.skills = worker.skills.split(',').map((s: string) => s.trim()).filter(Boolean)
-            }
-            if (typeof worker.locality === 'string') {
-                worker.locality = [worker.locality]
-            }
-        }
-
-        return worker
-    } catch (error) {
-        console.error("Failed to fetch worker profile:", error)
-        return null
-    }
-}
+import { getAuthenticatedWorkerProfile } from "@/lib/api"
 
 export default async function EditProfilePage() {
     const user = await getCurrentUser()
@@ -74,7 +20,7 @@ export default async function EditProfilePage() {
         redirect("/login")
     }
 
-    const worker = await getWorkerProfile()
+    const worker = await getAuthenticatedWorkerProfile()
 
     if (!worker) {
         return (

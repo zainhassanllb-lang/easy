@@ -10,9 +10,9 @@ export default function WorkerRegisterPage() {
     <>
       <Header />
       <PageBanner
-        image="/auth-banner.jpg"
+        image="/worker-profile-banner.jpg"
         title="Worker Registration"
-        description="Create your account to get started"
+        description="Join our network of professional workers and grow your business"
         height="md"
       />
       <main className="min-h-screen bg-muted/40 py-12 px-4">

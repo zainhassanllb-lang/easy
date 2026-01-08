@@ -159,116 +159,178 @@ export function WorkerCard({ worker }: WorkerCardProps) {
 
   return (
     <>
-      <Link href={`/worker/${worker.id}`} className="block">
-        <Card className="group relative h-[520px] flex flex-col hover:shadow-2xl transition-all duration-500 border-none bg-background overflow-hidden ring-1 ring-slate-200/50">
-          {/* Magazine Cover Image Section */}
-          <div className="relative h-[280px] w-full overflow-hidden">
-            <Image
-              src={
-                worker.profileImage ||
-                `/placeholder.svg?height=400&width=400&query=professional pakistani ${worker.category || ""} worker portrait smiling`
-              }
-              alt={worker.name}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-            />
+      <Link href={`/worker/${worker.id}`} className="block h-full">
+        <Card className="group relative flex flex-col md:flex-col h-full hover:shadow-xl transition-all duration-300 border border-slate-100 bg-white overflow-hidden rounded-2xl ring-1 ring-slate-200/50">
 
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          {/* Mobile Layout (Horizontal) - Visible only on small screens */}
+          <div className="flex md:hidden h-full">
+            {/* Left Image Section */}
+            <div className="relative w-32 min-w-[120px] bg-slate-100">
+              <Image
+                src={
+                  worker.profileImage ||
+                  `/placeholder.svg?height=400&width=400&query=professional pakistani ${worker.category || ""} worker portrait smiling`
+                }
+                alt={worker.name}
+                fill
+                className="object-cover"
+              />
+              {/* Verified Badge - Mobile */}
+              {worker.isVerified && (
+                <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-full p-1 shadow-sm">
+                  <CheckCircle2 className="h-3 w-3 text-green-600 fill-green-100" />
+                </div>
+              )}
+            </div>
 
-            {/* Verification Badge */}
-            {worker.isVerified && (
-              <div className="absolute top-4 left-4 bg-green-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg animate-in fade-in slide-in-from-left-2 duration-300">
-                <CheckCircle2 className="h-3.5 w-3.5 fill-white text-green-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Verified Pro</span>
+            {/* Right Content Section */}
+            <div className="flex-1 p-3 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-bold text-slate-900 line-clamp-1 leading-tight">{worker.name}</h3>
+                    <p className="text-xs text-muted-foreground font-medium mb-1">{worker.category}</p>
+                  </div>
+                  <div className="flex items-center gap-1 bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                    <span className="text-xs font-bold">{worker.rating || "New"}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 text-slate-500 text-xs mt-1">
+                  <MapPin className="h-3 w-3" />
+                  <span className="truncate max-w-[100px]">{worker.locality || worker.city}</span>
+                </div>
               </div>
-            )}
 
-            {/* Package Badge (if any) */}
-            {worker.packageType && (
-              <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg border border-white/20">
-                <Star className="h-3.5 w-3.5 fill-white text-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest">{worker.packageType}</span>
+              {/* Mobile Actions */}
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-8 text-xs font-bold border-slate-200"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsCallDialogOpen(true)
+                  }}
+                >
+                  Call
+                </Button>
+                <Button
+                  size="sm"
+                  className="h-8 text-xs font-bold bg-green-600 hover:bg-green-700"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    window.open(`https://wa.me/${worker.whatsapp.replace(/[^0-9]/g, "")}`, "_blank")
+                  }}
+                >
+                  WhatsApp
+                </Button>
               </div>
-            )}
-
-            {/* Bottom Info Overlay */}
-            <div className="absolute bottom-4 left-4 right-4">
-              <span className="inline-block px-2 py-1 rounded bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase font-bold tracking-tighter mb-2">
-                {worker.category}
-              </span>
-              <h3 className="text-xl font-black text-white leading-tight drop-shadow-md group-hover:text-primary transition-colors line-clamp-1">
-                {worker.name}
-              </h3>
             </div>
           </div>
 
-          <CardContent className="flex-1 p-6 flex flex-col justify-between bg-white relative">
-            {/* Quick Stats Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-slate-500">
-                  <MapPin className="h-4 w-4" />
-                  <span className="text-xs font-bold truncate max-w-[120px]">{worker.locality}</span>
-                </div>
-                <div className="flex items-center gap-1 text-amber-500">
-                  <Star className="h-4 w-4 fill-amber-500" />
-                  <span className="text-sm font-black">{worker.rating || "N/A"}</span>
-                </div>
+
+          {/* Desktop Layout (Vertical) - Visible only on medium+ screens */}
+          <div className="hidden md:flex flex-col h-full">
+            {/* Image Section */}
+            <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+              <Image
+                src={
+                  worker.profileImage ||
+                  `/placeholder.svg?height=400&width=400&query=professional pakistani ${worker.category || ""} worker portrait smiling`
+                }
+                alt={worker.name}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
+
+              {/* Badges */}
+              <div className="absolute top-3 left-3 flex gap-2">
+                {worker.isVerified && (
+                  <div className="bg-white/90 backdrop-blur-md text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                    <CheckCircle2 className="h-3 w-3 fill-green-100" />
+                    <span className="text-[10px] font-bold uppercase">Verified</span>
+                  </div>
+                )}
               </div>
-
-              <div className="h-px bg-slate-100" />
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Experience</div>
-                  <div className="flex items-center gap-1.5 font-black text-slate-800">
-                    <Briefcase className="h-3.5 w-3.5 text-primary" />
-                    <span>{worker.experience}+ YRS</span>
-                  </div>
+              {worker.packageType && (
+                <div className="absolute top-3 right-3 bg-primary/90 backdrop-blur-md text-white px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                  <Star className="h-3 w-3 fill-white text-white" />
+                  <span className="text-[10px] font-bold uppercase">{worker.packageType}</span>
                 </div>
-                <div className="space-y-1">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Availability</div>
-                  <div className="flex items-center gap-1.5 font-black text-slate-800">
-                    <Clock className="h-3.5 w-3.5 text-primary" />
-                    <span>Anytime</span>
-                  </div>
-                </div>
+              )}
+
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <h3 className="text-xl font-bold leading-tight truncate">{worker.name}</h3>
+                <p className="text-sm text-white/90 font-medium">{worker.category}</p>
               </div>
             </div>
 
-            {/* Action Buttons Section */}
-            <div className="grid grid-cols-2 gap-3 mt-6 relative z-10">
-              <Button
-                variant="outline"
-                className="w-full h-11 border-2 border-slate-200 text-slate-900 font-black rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  handleStatsClick("call")
-                  setIsCallDialogOpen(true)
-                }}
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                CALL
-              </Button>
-              <Button
-                className="w-full h-11 bg-green-600 hover:bg-green-700 text-white font-black rounded-xl shadow-lg shadow-green-200 transition-all duration-300 active:scale-95"
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  handleStatsClick("whatsapp")
-                  window.open(`https://wa.me/${worker.whatsapp.replace(/[^0-9]/g, "")}`, "_blank")
-                }}
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                CHAT
-              </Button>
-            </div>
-          </CardContent>
+            {/* Content Section */}
+            <CardContent className="flex-1 p-5 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <MapPin className="h-4 w-4 text-slate-400" />
+                    <span className="font-medium truncate max-w-[140px]">{worker.locality}</span>
+                  </div>
+                  <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-md text-amber-700 font-bold border border-amber-100">
+                    <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+                    <span>{worker.rating || "N/A"}</span>
+                  </div>
+                </div>
 
-          {/* Hover Reveal Effect - Moved before content or added z-index to content */}
-          <div className="absolute inset-0 bg-primary/5 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                <div className="grid grid-cols-2 gap-3 py-3 border-t border-b border-slate-50">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-primary/10 rounded-full text-primary">
+                      <Briefcase className="h-3.5 w-3.5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Exp</p>
+                      <p className="text-sm font-bold text-slate-700">{worker.experience}+ Yrs</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-green-100 rounded-full text-green-600">
+                      <Clock className="h-3.5 w-3.5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Avail</p>
+                      <p className="text-sm font-bold text-slate-700">Anytime</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                <Button
+                  variant="outline"
+                  className="w-full font-bold border-slate-200 hover:border-primary hover:text-primary transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleStatsClick("call")
+                    setIsCallDialogOpen(true)
+                  }}
+                >
+                  Call
+                </Button>
+                <Button
+                  className="w-full bg-green-600 hover:bg-green-700 font-bold shadow-md shadow-green-100"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleStatsClick("whatsapp")
+                    window.open(`https://wa.me/${worker.whatsapp.replace(/[^0-9]/g, "")}`, "_blank")
+                  }}
+                >
+                  WhatsApp
+                </Button>
+              </div>
+            </CardContent>
+          </div>
         </Card>
       </Link>
 
