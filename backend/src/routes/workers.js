@@ -14,18 +14,18 @@ const upload = createUploader('workers');
 const SupportMessage = require('../models/SupportMessage');
 
 const registerWorkerSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(6),
-  phone: z.string().min(5),
-  whatsapp: z.string().min(5),
-  city: z.string().min(1),
+  name: z.string().min(1, 'Name is required').regex(/^[A-Za-z\s]+$/, 'Name can only contain alphabets and spaces'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  phone: z.string().length(11, 'Phone number must be exactly 11 digits').regex(/^\d+$/, 'Phone must contain only digits'),
+  whatsapp: z.string().length(11, 'WhatsApp number must be exactly 11 digits').regex(/^\d+$/, 'WhatsApp must contain only digits'),
+  city: z.string().min(1, 'City is required'),
   locality: z.union([z.string(), z.array(z.string())]).transform((val) => Array.isArray(val) ? val : [val]),
-  category: z.string().min(1),
+  category: z.string().min(1, 'Category is required'),
   experience: z.coerce.number().int().nonnegative(),
   skills: z.union([z.string(), z.array(z.string())]).optional().default([]),
-  about: z.string().min(1),
-  cnicNumber: z.string().min(5)
+  about: z.string().min(1, 'About text is required'),
+  cnicNumber: z.string().regex(/^\d{5}-\d{7}-\d{1}$/, 'Invalid CNIC format (12345-1234567-1)')
 });
 
 function setAuthCookie(res, token) {
@@ -49,7 +49,26 @@ router.post(
       // If client sends JSON, multer won't run; Express json will be used.
       const raw = req.is('application/json') ? req.body : body;
 
-      const parsed = registerWorkerSchema.parse(raw);
+      let parsed;
+      try {
+        parsed = registerWorkerSchema.parse(raw);
+      } catch (zodError) {
+        // Format Zod validation errors into user-friendly messages
+        if (zodError.errors && Array.isArray(zodError.errors)) {
+          const firstError = zodError.errors[0];
+          const errorMessage = firstError.message || 'Validation failed';
+          return res.status(400).json({
+            success: false,
+            error: errorMessage,
+            field: firstError.path?.[0] || null
+          });
+        }
+        // Fallback for unexpected error format
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid input. Please check your form and try again.'
+        });
+      }
 
       let existing = null;
 
@@ -232,7 +251,43 @@ router.post(
       if (!workerId) return res.status(404).json({ error: 'Worker not found' });
 
       const body = req.body && Object.keys(req.body).length ? req.body : {};
-      const updates = { ...body };
+
+      // Define update schema (all fields optional but must follow format if provided)
+      const updateSchema = z.object({
+        name: z.string().min(1, 'Name is required').regex(/^[A-Za-z\s]+$/, 'Name can only contain letters and spaces').optional(),
+        email: z.string().email('Invalid email address').optional(),
+        phone: z.string().length(11, 'Phone number must be exactly 11 digits').regex(/^\d+$/, 'Phone must contain only digits').optional(),
+        whatsapp: z.string().length(11, 'WhatsApp number must be exactly 11 digits').regex(/^\d+$/, 'WhatsApp must contain only digits').optional(),
+        city: z.string().min(1, 'City is required').optional(),
+        locality: z.union([z.string(), z.array(z.string())]).transform((val) => Array.isArray(val) ? val : [val]).optional(),
+        category: z.string().min(1, 'Category is required').optional(),
+        experience: z.coerce.number().int('Experience must be a whole number').nonnegative('Experience cannot be negative').optional(),
+        skills: z.union([z.string(), z.array(z.string())]).optional(),
+        about: z.string().min(1, 'About text is required').optional(),
+        cnicNumber: z.string().regex(/^\d{5}-\d{7}-\d{1}$/, 'Invalid CNIC format (12345-1234567-1)').optional()
+      });
+
+      let parsed;
+      try {
+        parsed = updateSchema.parse(body);
+      } catch (zodError) {
+        // Format Zod validation errors into user-friendly messages
+        if (zodError.errors && Array.isArray(zodError.errors)) {
+          const firstError = zodError.errors[0];
+          const errorMessage = firstError.message || 'Validation failed';
+          return res.status(400).json({
+            success: false,
+            error: errorMessage,
+            field: firstError.path?.[0] || null
+          });
+        }
+        // Fallback for unexpected error format
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid input. Please check your form and try again.'
+        });
+      }
+      const updates = { ...parsed };
 
       const files = req.files || {};
 

@@ -16,6 +16,7 @@ import {
 import { cities } from "@/lib/database";
 import { useLanguage } from "@/components/language-provider";
 import { GoogleAuthButton } from "@/components/google-auth-button";
+import { User, Mail, Lock, Phone, MapPin } from "lucide-react";
 
 export function UnifiedRegistrationForm() {
   const [formData, setFormData] = useState({
@@ -114,101 +115,105 @@ export function UnifiedRegistrationForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">{t("fullName")} *</Label>
-          <Input
-            id="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={(e) => {
-              const value = e.target.value;
-              // Only allow alphabets and spaces
-              if (value === "" || /^[A-Za-z\s]+$/.test(value)) {
-                setFormData({ ...formData, name: value });
-                setFieldErrors({ ...fieldErrors, name: "" });
-              }
-            }}
-            onBlur={() => setFieldErrors({ ...fieldErrors, name: validateName(formData.name) })}
-            required
-            className={`h-12 ${fieldErrors.name ? "border-red-500" : ""}`}
-          />
-          {fieldErrors.name && (
-            <p className="text-sm text-red-500">{fieldErrors.name}</p>
-          )}
+        <div className="space-y-1.5">
+          <Label htmlFor="name">{t("fullName")}</Label>
+          <div className="relative group">
+            <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || /^[A-Za-z\s]+$/.test(value)) {
+                  setFormData({ ...formData, name: value });
+                  setFieldErrors({ ...fieldErrors, name: "" });
+                }
+              }}
+              onBlur={() => setFieldErrors({ ...fieldErrors, name: validateName(formData.name) })}
+              required
+              className={`pl-10 h-10 ${fieldErrors.name ? "border-red-500" : ""}`}
+            />
+          </div>
+          {fieldErrors.name && <p className="text-xs text-red-500 mt-1">{fieldErrors.name}</p>}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">{t("email")} *</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="your@email.com"
-            value={formData.email}
-            onChange={(e) => {
-              setFormData({ ...formData, email: e.target.value });
-              setFieldErrors({ ...fieldErrors, email: "" });
-            }}
-            onBlur={() => setFieldErrors({ ...fieldErrors, email: validateEmail(formData.email) })}
-            required
-            className={`h-12 ${fieldErrors.email ? "border-red-500" : ""}`}
-          />
-          {fieldErrors.email && (
-            <p className="text-sm text-red-500">{fieldErrors.email}</p>
-          )}
+        <div className="space-y-1.5">
+          <Label htmlFor="email">{t("email")}</Label>
+          <div className="relative group">
+            <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="your@email.com"
+              value={formData.email}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value });
+                setFieldErrors({ ...fieldErrors, email: "" });
+              }}
+              onBlur={() => setFieldErrors({ ...fieldErrors, email: validateEmail(formData.email) })}
+              required
+              className={`pl-10 h-10 ${fieldErrors.email ? "border-red-500" : ""}`}
+            />
+          </div>
+          {fieldErrors.email && <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>}
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">{t("password")} *</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Create a strong password"
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-          required
-          className="h-12"
-        />
+      <div className="space-y-1.5">
+        <Label htmlFor="password">{t("password")}</Label>
+        <div className="relative group">
+          <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+          <Input
+            id="password"
+            type="password"
+            placeholder="Create a strong password"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+            required
+            className="pl-10 h-10"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="phone">{t("phoneNumber")} *</Label>
-          <Input
-            id="phone"
-            placeholder="03001234567"
-            value={formData.phone}
-            onChange={(e) => {
-              const value = e.target.value;
-              // Only allow numbers and limit to 11 digits
-              const digitsOnly = value.replace(/[^0-9]/g, "");
-              if (digitsOnly.length <= 11) {
-                setFormData({ ...formData, phone: digitsOnly });
-                setFieldErrors({ ...fieldErrors, phone: "" });
-              }
-            }}
-            onBlur={() => setFieldErrors({ ...fieldErrors, phone: validatePhone(formData.phone) })}
-            required
-            maxLength={11}
-            className={`h-12 ${fieldErrors.phone ? "border-red-500" : ""}`}
-          />
-          {fieldErrors.phone && (
-            <p className="text-sm text-red-500">{fieldErrors.phone}</p>
-          )}
-          <p className="text-xs text-muted-foreground">Enter 11 digit phone number (e.g., 03001234567)</p>
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">{t("phoneNumber")}</Label>
+          <div className="relative group">
+            <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="phone"
+              placeholder="03001234567"
+              value={formData.phone}
+              onChange={(e) => {
+                const value = e.target.value;
+                const digitsOnly = value.replace(/[^0-9]/g, "");
+                if (digitsOnly.length <= 11) {
+                  setFormData({ ...formData, phone: digitsOnly });
+                  setFieldErrors({ ...fieldErrors, phone: "" });
+                }
+              }}
+              onBlur={() => setFieldErrors({ ...fieldErrors, phone: validatePhone(formData.phone) })}
+              required
+              maxLength={11}
+              className={`pl-10 h-10 ${fieldErrors.phone ? "border-red-500" : ""}`}
+            />
+          </div>
+          {fieldErrors.phone && <p className="text-xs text-red-500 mt-1">{fieldErrors.phone}</p>}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="city">{t("city")} *</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="city">{t("city")}</Label>
           <Select
             value={formData.city}
             onValueChange={(value) => setFormData({ ...formData, city: value })}
           >
-            <SelectTrigger className="h-12">
+            <SelectTrigger className="h-10 pl-10 relative">
+              <MapPin className="absolute left-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <SelectValue placeholder={t("selectCity")} />
             </SelectTrigger>
             <SelectContent>
@@ -223,12 +228,12 @@ export function UnifiedRegistrationForm() {
       </div>
 
       {error && (
-        <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20">
+        <div className="p-2 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20">
           {error}
         </div>
       )}
 
-      <Button type="submit" className="w-full h-12" disabled={loading}>
+      <Button type="submit" className="w-full h-10" disabled={loading}>
         {loading ? t("creatingAccount") : t("createAccount")}
       </Button>
 

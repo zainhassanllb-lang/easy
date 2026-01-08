@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { GoogleAuthButton } from "@/components/google-auth-button";
@@ -102,80 +102,64 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email" className="text-sm font-medium">
-          Email
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="h-12"
-        />
-      </div>
+      <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+          <div className="relative group">
+            <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="pl-10 h-10"
+            />
+          </div>
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password" className="text-sm font-medium">
-          Password
-        </Label>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="pr-10 h-12"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
-          </button>
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+          <div className="relative group">
+            <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="pl-10 pr-10 h-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+          <Switch id="remember" checked={rememberMe} onCheckedChange={setRememberMe} />
+          <Label htmlFor="remember" className="font-normal cursor-pointer text-muted-foreground">Remember me</Label>
+        </div>
+        <Link href="/forgot-password" className="text-primary hover:underline">
           Forgot password?
         </Link>
       </div>
 
-      <div className="flex items-center justify-between py-2">
-        <Label
-          htmlFor="remember"
-          className="text-sm text-muted-foreground font-normal cursor-pointer"
-        >
-          Remember sign in details
-        </Label>
-        <Switch
-          id="remember"
-          checked={rememberMe}
-          onCheckedChange={setRememberMe}
-        />
-      </div>
-
       {error && (
-        <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+        <div className="text-sm text-destructive bg-destructive/10 p-2 rounded-md">
           {error}
         </div>
       )}
 
-      <Button
-        type="submit"
-        className="w-full h-12 text-base"
-        disabled={loading}
-      >
+      <Button type="submit" className="w-full h-10 text-base" disabled={loading}>
         {loading ? "Signing in..." : "Log in"}
       </Button>
 

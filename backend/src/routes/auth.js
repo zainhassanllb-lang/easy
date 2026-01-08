@@ -14,17 +14,17 @@ router.get('/test-ping', (req, res) => {
 });
 
 const registerClientSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(6),
-  phone: z.string().min(5),
-  city: z.string().min(1),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  phone: z.string().min(5, 'Phone number is required'),
+  city: z.string().min(1, 'City is required'),
   locality: z.string().optional().default('')
 });
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1)
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(1, 'Password is required')
 });
 
 function setAuthCookie(res, token) {
@@ -34,7 +34,24 @@ function setAuthCookie(res, token) {
 
 router.post('/register-client', async (req, res, next) => {
   try {
-    const data = registerClientSchema.parse(req.body);
+    let data;
+    try {
+      data = registerClientSchema.parse(req.body);
+    } catch (zodError) {
+      if (zodError.errors && Array.isArray(zodError.errors)) {
+        const firstError = zodError.errors[0];
+        const errorMessage = firstError.message || 'Validation failed';
+        return res.status(400).json({
+          success: false,
+          error: errorMessage,
+          field: firstError.path?.[0] || null
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid input. Please check your form and try again.'
+      });
+    }
 
     const existing = await User.findOne({ email: data.email.toLowerCase() });
     if (existing) return res.status(409).json({ success: false, error: 'Email already in use' });
@@ -66,7 +83,26 @@ router.post('/register-client', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
   try {
-    const { email, password } = loginSchema.parse(req.body);
+    let loginData;
+    try {
+      loginData = loginSchema.parse(req.body);
+    } catch (zodError) {
+      if (zodError.errors && Array.isArray(zodError.errors)) {
+        const firstError = zodError.errors[0];
+        const errorMessage = firstError.message || 'Validation failed';
+        return res.status(400).json({
+          success: false,
+          error: errorMessage,
+          field: firstError.path?.[0] || null
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid input. Please check your form and try again.'
+      });
+    }
+
+    const { email, password } = loginData;
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ success: false, error: 'Invalid credentials' });
 

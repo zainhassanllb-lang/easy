@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Camera } from "lucide-react"
+import { Camera, User, Phone } from "lucide-react"
 
 interface EditClientProfileFormProps {
   client: Client
@@ -56,45 +56,55 @@ export function EditClientProfileForm({ client }: EditClientProfileFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex justify-center">
         <div className="relative">
-          <Avatar className="h-32 w-32">
-            <AvatarImage src={formData.profileImage || "/placeholder.svg?height=128&width=128"} />
-            <AvatarFallback className="text-4xl">{formData.name.charAt(0)}</AvatarFallback>
+          <Avatar className="h-24 w-24 border">
+            <AvatarImage src={formData.profileImage || "/placeholder.svg?height=96&width=96"} />
+            <AvatarFallback className="text-3xl bg-muted">{formData.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <label
             htmlFor="profile-image"
-            className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90"
+            className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-1.5 cursor-pointer hover:bg-primary/90 shadow-sm"
           >
-            <Camera className="h-5 w-5" />
+            <Camera className="h-4 w-4" />
             <input id="profile-image" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
           </label>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="name">Full Name</Label>
-        <Input
-          id="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="name" className="text-xs font-semibold">Full Name</Label>
+          <div className="relative group">
+            <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+              className="pl-9 h-10 text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="phone" className="text-xs font-semibold">Phone Number</Label>
+          <div className="relative group">
+            <Phone className="absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input
+              id="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              required
+              className="pl-9 h-10 text-sm"
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="phone">Phone Number</Label>
-        <Input
-          id="phone"
-          type="tel"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          required
-        />
-      </div>
-
-      <Button type="submit" className="w-full" disabled={uploading}>
+      <Button type="submit" className="w-full h-10 text-sm font-medium" disabled={uploading}>
         {uploading ? "Updating..." : "Save Changes"}
       </Button>
     </form>

@@ -55,6 +55,7 @@ const WorkerSchema = new mongoose.Schema(
 
 WorkerSchema.methods.isPackageActive = function isPackageActive() {
   if (!this.hasPurchasedPackage) return false;
+  if (this.paymentStatus !== 'verified') return false;
   if (!this.packageExpiry) return true;
   return new Date(this.packageExpiry) >= new Date();
 };

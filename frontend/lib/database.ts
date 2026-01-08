@@ -193,6 +193,14 @@ export const categories: Category[] = [
     icon: "needle",
     imageUrl: "/darning-service.png",
   },
+  {
+    id: "16",
+    name: "AC Technician",
+    slug: "ac-technician",
+    description: "Expert air conditioning repair, installation, and maintenance",
+    icon: "wind",
+    imageUrl: "/professional-pakistani-ac-technician-repairing-air.jpg",
+  },
 ]
 
 export const cities = [
@@ -405,209 +413,7 @@ export const packages: Package[] = [
   },
 ]
 
-export const mockWorkers: Worker[] = []
-
-// Mock user storage
-const users: User[] = []
-
-const workers: Worker[] = [...mockWorkers]
-
-// Mock client storage
-const clients: Client[] = []
-
-// Helper functions
-export function getWorkersByLocation(city: string, locality?: string) {
-  return workers.filter((w) => w.city === city && w.isVerified && (!locality || w.locality.includes(locality)))
-}
-
-export function getWorkersByCategory(category: string, city?: string, locality?: string) {
-  let filtered = workers.filter((w) => {
-    // Only show verified workers with active packages
-    if (!w.isVerified || !w.hasPurchasedPackage) return false
-
-    // Check if package is active
-    if (w.packageExpiry && new Date(w.packageExpiry) < new Date()) return false
-
-    return w.category === category
-  })
-
-  if (city) {
-    filtered = filtered.filter((w) => w.city === city)
-  }
-
-  if (locality) {
-    filtered = filtered.filter((w) => w.locality.includes(locality))
-  }
-
-  return filtered.sort((a, b) => {
-    const rankA = a.packageType === "premium" ? 3 : a.packageType === "standard" ? 2 : 1
-    const rankB = b.packageType === "premium" ? 3 : b.packageType === "standard" ? 2 : 1
-
-    if (rankA !== rankB) return rankB - rankA
-    return b.rating - a.rating
-  })
-}
-
-export function getWorkerById(id: string) {
-  return workers.find((w) => w.id === id)
-}
-
-export function getFeaturedWorkers(limit = 6) {
-  return workers
-    .filter((w) => {
-      if (!w.isVerified || !w.hasPurchasedPackage || w.packageType !== "premium") return false
-      return !w.packageExpiry || new Date(w.packageExpiry) >= new Date()
-    })
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, limit)
-}
-
-export function incrementWorkerStats(
-  workerId: string,
-  stat: "profileViews" | "profileClicks" | "contactClicks" | "whatsappClicks",
-) {
-  const worker = workers.find((w) => w.id === workerId)
-  if (worker) {
-    worker[stat]++
-  }
-}
-
-export function getUnverifiedWorkers() {
-  return workers.filter((w) => !w.isVerified)
-}
-
-export function verifyWorker(workerId: string) {
-  const worker = workers.find((w) => w.id === workerId)
-  if (worker) {
-    worker.isVerified = true
-    worker.verificationStatus = "verified"
-    worker.verifiedAt = new Date()
-    worker.pendingCnicUpdate = false
-  }
-}
-
-export function addWorker(worker: Omit<Worker, "id" | "createdAt">) {
-  const newWorker: Worker = {
-    ...worker,
-    id: `worker-${Date.now()}`,
-    createdAt: new Date(),
-    verificationStatus: "pending",
-    pendingCnicUpdate: true,
-    paymentProof: null,
-    paymentStatus: null,
-  }
-  workers.push(newWorker)
-  return newWorker
-}
-
-export function updateWorker(workerId: string, updates: Partial<Worker>) {
-  const index = workers.findIndex((w) => w.id === workerId)
-  if (index !== -1) {
-    if (updates.cnicImages && updates.cnicImages.length > 0) {
-      updates.verificationStatus = "pending"
-      updates.isVerified = false
-      updates.pendingCnicUpdate = true
-    }
-    if (updates.paymentProof) {
-      updates.paymentStatus = "pending"
-    }
-    workers[index] = { ...workers[index], ...updates }
-    return workers[index]
-  }
-  return null
-}
-
-export function authenticateUser(email: string, password: string) {
-  return users.find((u) => u.email === email && u.password === password)
-}
-
-export function registerUser(email: string, password: string, role: "worker" | "client", profileId?: string) {
-  const newUser: User = {
-    id: `user-${Date.now()}`,
-    email,
-    password,
-    role,
-    profileId: profileId || "",
-    createdAt: new Date(),
-  }
-  users.push(newUser)
-  return newUser
-}
-
-export function isPackageExpired(worker: Worker): boolean {
-  if (!worker.packageExpiry) return false
-  return new Date(worker.packageExpiry) < new Date()
-}
-
-export function getDaysUntilExpiry(worker: Worker): number {
-  if (!worker.packageExpiry) return 0
-  const today = new Date()
-  const expiry = new Date(worker.packageExpiry)
-  const diff = expiry.getTime() - today.getTime()
-  return Math.ceil(diff / (1000 * 60 * 60 * 24))
-}
-
-export function purchasePackage(workerId: string, packageType: "basic" | "standard" | "premium") {
-  const worker = workers.find((w) => w.id === workerId)
-  const pkg = packages.find((p) => p.name.toLowerCase() === packageType)
-
-  if (worker && pkg) {
-    worker.packageType = packageType
-    worker.hasPurchasedPackage = true
-    worker.packageExpiry = new Date(Date.now() + pkg.duration * 24 * 60 * 60 * 1000)
-    return worker
-  }
-  return null
-}
-
-export function getWorkerByProfileId(profileId: string) {
-  const worker = workers.find((w) => w.id === profileId)
-  console.log("[v0] getWorkerByProfileId - Looking for:", profileId, "Found:", worker ? worker.id : "null")
-  return worker
-}
-
-export function getUserById(userId: string) {
-  return users.find((u) => u.id === userId)
-}
-
-export function addClient(client: Omit<Client, "id" | "createdAt">) {
-  const newClient: Client = {
-    ...client,
-    id: `client-${Date.now()}`,
-    createdAt: new Date(),
-  }
-  clients.push(newClient)
-  return newClient
-}
-
-export function updateClient(clientId: string, updates: Partial<Client>) {
-  const index = clients.findIndex((c) => c.id === clientId)
-  if (index !== -1) {
-    clients[index] = { ...clients[index], ...updates }
-    return clients[index]
-  }
-  return null
-}
-
-export function getClientById(clientId: string) {
-  return clients.find((c) => c.id === clientId)
-}
-
-export function verifyPayment(workerId: string, approved: boolean) {
-  const worker = workers.find((w) => w.id === workerId)
-  if (worker) {
-    worker.paymentStatus = approved ? "verified" : "rejected"
-    if (approved) {
-      worker.isActive = true
-      worker.hasPurchasedPackage = true
-    }
-  }
-}
-
-export function getWorkersPendingPayment() {
-  return workers.filter((w) => w.paymentStatus === "pending")
-}
-
+// Helper functions for static data
 export function getCitiesWithWorkers(): string[] {
   return cities.map((city) => city.label)
 }
